@@ -1,9 +1,13 @@
 // src/app/SearchResults/page.tsx
+
 import { fetchRssArticles } from '../utils/rss'; // adjust path as needed
 import type { Article } from '../utils/rss';
 import { format } from 'date-fns';
 
-export default async function SearchResults({ query }: { query: string }) {
+// Server Component (fetches data directly)
+export default async function SearchResults({ searchParams }: { searchParams: { query: string } }) {
+  const query = searchParams.query || '';
+  
   const articles: Article[] = query ? await fetchRssArticles({ keyword: query, sortBy: 'publishedAt' }) : [];
 
   return (
@@ -54,9 +58,4 @@ export default async function SearchResults({ query }: { query: string }) {
       </div>
     </div>
   );
-}
-
-// Server component to handle the fetching of data
-export async function SearchResultsPage({ params }: { params: { query: string } }) {
-  return <SearchResults query={params.query} />;
 }
