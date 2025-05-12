@@ -3,11 +3,6 @@ import { fetchRssArticles } from '../utils/rss'; // adjust path as needed
 import type { Article } from '../utils/rss';
 import { format } from 'date-fns';
 
-interface SearchResultsProps {
-  query: string;
-  articles: Article[];
-}
-
 export default async function SearchResults({ query }: { query: string }) {
   const articles: Article[] = query ? await fetchRssArticles({ keyword: query, sortBy: 'publishedAt' }) : [];
 
