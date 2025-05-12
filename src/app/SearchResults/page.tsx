@@ -1,22 +1,23 @@
 // src/app/SearchResults/page.tsx
-'use client';  // This is needed for Client Component
+'use client';  // This is needed to specify this as a Client Component
 
-import { useSearchParams } from 'next/navigation';  // Use hook to access search params
+import { useSearchParams } from 'next/navigation';  // Hook for accessing search params
 import { useEffect, useState } from 'react';
-import { fetchRssArticles } from '../utils/rss'; // adjust path as needed
-import type { Article } from '../utils/rss';
-import { format } from 'date-fns';
+import { fetchRssArticles } from '../utils/rss'; // adjust path as needed for fetching RSS data
+import type { Article } from '../utils/rss'; // Define the Article type for data
+import { format } from 'date-fns';  // For formatting date strings
 
 export default function SearchResults() {
   const searchParams = useSearchParams();  // Get the query params from the URL
   const query = searchParams.get('query') || '';  // Extract the query param (if available)
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);  // State to store articles
 
   useEffect(() => {
+    // Fetch articles based on the query parameter
     if (query) {
       fetchRssArticles({ keyword: query, sortBy: 'publishedAt' }).then(setArticles);
     }
-  }, [query]);
+  }, [query]);  // Re-fetch articles when the query changes
 
   return (
     <div className="min-h-screen w-full relative bg-white">
@@ -30,7 +31,8 @@ export default function SearchResults() {
                 {query}
               </div>
             </div>
-            {/* Add your "Add to Terminal" button here */}
+            {/* Placeholder for "Add to Terminal" button */}
+            {/* Add any additional features here */}
           </div>
 
           {/* Articles Section */}
@@ -43,18 +45,18 @@ export default function SearchResults() {
                 <button
                   className="flex flex-row justify-between items-center w-full min-w-[120px]"
                   onClick={() => {
-                    window.open(article.url, '_blank');
+                    window.open(article.url, '_blank');  // Open article in a new tab
                   }}
                   type="button"
                 >
-                  {/* Left side */}
+                  {/* Left side: Article source and publication date */}
                   <div className="flex flex-col">
                     <span className="text-white text-xl font-normal font-['Aktiv_Grotesk']">{article.source.name}</span>
                     <span className="text-white text-base font-light font-['Aktiv_Grotesk'] leading-tight">
                       {format(new Date(article.publishedAt), "HH:mm - d MMMM yyyy")}
                     </span>
                   </div>
-                  {/* Right side */}
+                  {/* Right side: Article title */}
                   <div className="flex-1 flex items-center ml-8">
                     <span className="text-white text-2xl font-bold font-['Aktiv_Grotesk']">{article.title}</span>
                   </div>
