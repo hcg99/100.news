@@ -1,10 +1,6 @@
 'use client';
 
-//import { useState } from 'react';
-//import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-//import { format } from 'date-fns';
 import HomePageLight from './components/HomePageLight';
-//import HomePageLight2 from './components/HomePageLight2';
 import ContactPageDark from './components/ContactPageDark';
 import HomePage from './components/HomePage';
 
@@ -26,23 +22,6 @@ export  function Contact_D() {
     </main>
   );
 }
-
-/*interface Article {
-  title: string;
-  description: string;
-  url: string;
-  publishedAt: string;
-  source: {
-    name: string;
-  };
-}
-
-
-interface FilterOptions {
-  keyword: string;
-  sortBy: 'publishedAt' | 'relevancy';
-}
-  */
 
 export  function Home() {
   return (

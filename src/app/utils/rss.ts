@@ -2,9 +2,7 @@
 
 'use client';
 
-//import { useState } from 'react';
-//import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-//import { format } from 'date-fns';
+
 
 export interface Article {
     title: string;
