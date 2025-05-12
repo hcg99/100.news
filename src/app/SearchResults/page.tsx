@@ -1,14 +1,22 @@
 // src/app/SearchResults/page.tsx
+'use client';  // This is needed for Client Component
 
+import { useSearchParams } from 'next/navigation';  // Use hook to access search params
+import { useEffect, useState } from 'react';
 import { fetchRssArticles } from '../utils/rss'; // adjust path as needed
 import type { Article } from '../utils/rss';
 import { format } from 'date-fns';
 
-// Server Component (fetches data directly)
-export default async function SearchResults({ searchParams }: { searchParams: { query: string } }) {
-  const query = searchParams.query || '';
-  
-  const articles: Article[] = query ? await fetchRssArticles({ keyword: query, sortBy: 'publishedAt' }) : [];
+export default function SearchResults() {
+  const searchParams = useSearchParams();  // Get the query params from the URL
+  const query = searchParams.get('query') || '';  // Extract the query param (if available)
+  const [articles, setArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    if (query) {
+      fetchRssArticles({ keyword: query, sortBy: 'publishedAt' }).then(setArticles);
+    }
+  }, [query]);
 
   return (
     <div className="min-h-screen w-full relative bg-white">
