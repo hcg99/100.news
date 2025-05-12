@@ -1,23 +1,15 @@
 // src/app/SearchResults/page.tsx
-'use client';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { fetchRssArticles } from '../utils/rss'; // adjust path as needed
 import type { Article } from '../utils/rss';
-import { format } from 'date-fns'; // Add this import for date formatting
+import { format } from 'date-fns';
 
-export default function SearchResults() {
-    const searchParams = useSearchParams();
-    const query = searchParams.get('query') || '';
-    const [articles, setArticles] = useState<Article[]>([]);
+interface SearchResultsProps {
+    query: string;
+    articles: Article[];
+}
 
-    useEffect(() => {
-        if (query) {
-            fetchRssArticles({ keyword: query, sortBy: 'publishedAt' }).then(setArticles);
-        }
-    }, [query]);
-
-    return(
+export default function SearchResults({ query, articles }: SearchResultsProps) {
+    return (
         <div className="min-h-screen w-full relative bg-white">
             <div className="fixed inset-0 opacity-75 bg-black backdrop-blur-xl" />
             <div className="relative min-h-screen w-full px-[50px] py-[50px]">
@@ -29,13 +21,7 @@ export default function SearchResults() {
                                 {query}
                             </div>
                         </div>
-                        <div data-status="Inactive" className="w-72 h-12 relative">
-                            <div className="w-72 h-12 bg-gradient-to-br from-white/20 to-neutral-600/20 rounded-[30px] shadow-[0px_8px_20px_2px_rgba(0,0,0,0.25)] backdrop-blur-lg" />
-                            <div className="absolute left-[61px] top-[6px] text-white text-3xl font-light font-['Aktiv_Grotesk']">Add to Terminal</div>
-                            <div data-size="48" className="w-12 h-12 absolute left-[9px] top-[1px] overflow-hidden">
-                                <div className="w-7 h-7 left-[10px] top-[10px] absolute outline outline-2 outline-offset-[-1px] outline-white" />
-                            </div>
-                        </div>
+                        {/* Add your "Add to Terminal" button here */}
                     </div>
 
                     {/* Articles Section */}
@@ -49,8 +35,6 @@ export default function SearchResults() {
                                     className="flex flex-row justify-between items-center w-full min-w-[120px]"
                                     onClick={() => {
                                         window.open(article.url, '_blank');
-                                        console.log("1");
-                                        console.log(article.url);
                                     }}
                                     type="button"
                                 >
@@ -73,4 +57,25 @@ export default function SearchResults() {
             </div>
         </div>
     );
+}
+
+// Fetch data on each request with `getServerSideProps`
+export async function getServerSideProps({ query }: { query: { query: string } }) {
+    const searchQuery = query.query || ''; // Extract query from URL
+    let articles: Article[] = [];
+
+    if (searchQuery) {
+        try {
+            articles = await fetchRssArticles({ keyword: searchQuery, sortBy: 'publishedAt' });
+        } catch (error) {
+            console.error('Error fetching articles:', error);
+        }
+    }
+
+    return {
+        props: {
+            query: searchQuery,
+            articles,
+        },
+    };
 }
