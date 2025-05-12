@@ -14,21 +14,3 @@ export default function Home_L() {
   );
 }
 
-export  function Contact_D() {
-  return (
-    <main>
-      <ContactPageDark />
-      {/* ...other content (if any)... */}
-    </main>
-  );
-}
-
-export  function Home() {
-  return (
-    <main>
-      <HomePage />
-      {/* ...other content (if any)... */}
-    </main>
-  );
-}
-
